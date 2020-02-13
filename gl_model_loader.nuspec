@@ -16,8 +16,10 @@
   </metadata>
   
   <files>
-    <file src="x64\Release\model_loader.lib" target="build/native/lib"/>
-    <file src="x64\Release\model_loader.dll" target="build/native/bin"/>
+    <file src="x64\Release\model_loader.lib" target="build/native/lib/x64/Release"/>
+    <file src="x64\Release\model_loader.dll" target="build/native/bin/x64/Release"/>
+    <file src="x64\Debug\model_loader.lib" target="build/native/lib/x64/Debug"/>
+    <file src="x64\Debug\model_loader.dll" target="build/native/bin/x64/Debug"/>
     <file src="*.h" target="build/native/include"/>
     <file src="gl_model_loader.props" target="build/native"/>
   </files>

@@ -14,8 +14,11 @@
     <Link>
       <AdditionalDependencies>$(ModelLoaderLibraries);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-        <Command>xcopy /y "$(MSBuildThisFileDirectory)bin\*.dll" "$(OutDir)"</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
+  <Target Name="ModelLoader_AfterBuild_Release" Condition="'$(Configuration.ToLower())' == 'release'" AfterTargets="AfterBuild">
+    <Copy SourceFiles="$(MSBuildThisFileDirectory)bin/x64/Release/model_loader.dll" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+  </Target>
+  <Target Name="ModelLoader_AfterBuild_Debug"  Condition="'$(Configuration.ToLower())' == 'debug'" AfterTargets="AfterBuild">
+    <Copy SourceFiles="$(MSBuildThisFileDirectory)bin/x64/Debug/model_loader.dll" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+  </Target>
 </Project>
