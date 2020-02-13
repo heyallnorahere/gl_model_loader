@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <LibraryType Condition="'$(Configuration)'=='Debug'">mdd</LibraryType>
+    <LibraryType Condition="'$(Configuration)'=='Release'">md</LibraryType>
+  </PropertyGroup>
+  <ItemGroup>
+  <ModelLoaderLibs Include="$(MSBuildThisFileDirectory)build\native\lib\*.lib" />
+  </ItemGroup>
+  <PropertyGroup>
+    <!-- Expland the items to a property -->
+    <ModelLoaderLibraries>@(ModelLoaderLibs)</ModelLoaderLibraries>
+    </PropertyGroup>
+    <ItemDefinitionGroup>
+    <ClCompile>	<AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)\lib\native\include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(ModelLoaderLibraries);%(AdditionalDependencies) 
+      </AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+        <Command>xcopy /y "$(MSBuildThisFileDirectory)build\native\bin\*.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+</Project>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+	<metadata>
+		<id>gl_model_loader</id>
+		<version>1.2</version>
+		<description>opengl model loader</description>
+		<tags>Native native OpenGL opengl Opengl</tags>
+        <authors>Theo Beda</authors>
+        <dependencies>
+            <dependency id="Assimp" version="3.0.0"/>
+            <dependency id="Assimp.redist" version="3.0.0"/>
+            <dependency id="glm" version="0.9.9.700"/>
+            <dependency id="unofficial-flayan-glew" version="2.1.0"/>
+            <dependency id="unofficial-flayan-glew.redist" version="2.1.0"/>
+        </dependencies>
+	</metadata>
+	
+	<files>
+		<file src="lib\*.lib" target="build/native/lib"/>
+        <file src="lib\*.dll" target="build/native/bin"/>
+		<file src="include\*.*" target="build/native/include"/>
+		<file src="gl_model_loader.props" target="build/native"/>
+	</files>
+</package>
