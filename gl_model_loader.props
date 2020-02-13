@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ModelLoaderLibs Include="$(MSBuildThisFileDirectory)lib\*.lib" />
+    <ModelLoaderLibs Condition="'$(Configuration.ToLower())' == 'release'" Include="$(MSBuildThisFileDirectory)lib\x64\Release\*.lib" />
+    <ModelLoaderLibs Condition="'$(Configuration.ToLower())' == 'debug'" Include="$(MSBuildThisFileDirectory)lib\x64\Debug\*.lib" />
   </ItemGroup>
   <PropertyGroup>
     <!-- Expland the items to a property -->
