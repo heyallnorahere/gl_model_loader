@@ -96,11 +96,16 @@ vector<texture> model::load_material_textures(aiMaterial* mat, aiTextureType typ
 unsigned int TextureFromFile(const char* path, const string& directory, bool gamma)
 {
 	string filename = string(path);
-	string fullpath = directory + '/' + filename;
-
+	string fullpath;
+	// absolute path
+	if (filename.c_str()[1] == ':' || filename.c_str()[0] == '/') fullpath = filename;
+	// relative path
+	else fullpath = directory + "/" + filename;
+	// for blender 2.8 obj
+	size_t strpos;
+	while ((strpos = fullpath.find("\\\\")) != string::npos) { fullpath.replace(strpos, 2, "\\"); }
 	unsigned int textureID;
 	glGenTextures(1, &textureID);
-
 	int width, height, nrComponents;
 	unsigned char* data = stbi_load(fullpath.c_str(), &width, &height, &nrComponents, 0);
 	if (data)
@@ -126,7 +131,7 @@ unsigned int TextureFromFile(const char* path, const string& directory, bool gam
 	}
 	else
 	{
-		std::cout << "Texture failed to load at path: " << path << std::endl;
+		std::cout << "Texture failed to load at path: " << fullpath << std::endl;
 		stbi_image_free(data);
 	}
 
