@@ -1,1 +1,1 @@
-model loader loads models (.obj, .stl, etc) with assimp and converts them to opengl vertex array objects for drawing
+model loader loads models (.obj, .fbx, etc) with assimp and converts them to opengl vertex array objects for drawing
