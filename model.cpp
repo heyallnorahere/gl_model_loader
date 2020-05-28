@@ -61,9 +61,9 @@ mesh model::process_mesh(aiMesh* mesh) {
 		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 		vector<texture> specularMaps = load_material_textures(material, aiTextureType_SPECULAR, "texture_specular");
 		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-		vector<texture> normalMaps = this->load_material_textures(material, aiTextureType_HEIGHT, "texture_normal");
+		vector<texture> normalMaps = this->load_material_textures(material, aiTextureType_AMBIENT, "texture_normal");
 		textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-		vector<texture> heightMaps = this->load_material_textures(material, aiTextureType_AMBIENT, "texture_height");
+		vector<texture> heightMaps = this->load_material_textures(material, aiTextureType_HEIGHT, "texture_height");
 		textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 	}
 	return ::mesh(vertices, indices, textures, mesh);
