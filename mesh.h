@@ -7,52 +7,68 @@
 #include <assimp/scene.h>
 #define MAX_BONES_PER_VERTEX 4
 struct vertex {
-	inline vertex() {
-		memset(&this->ids, 0, sizeof(unsigned int) * MAX_BONES_PER_VERTEX);
-		memset(&this->weights, 0, sizeof(float) * MAX_BONES_PER_VERTEX);
-	}
 	glm::vec3 pos;
 	glm::vec3 normal;
 	glm::vec2 uv;
+	
+};
+struct vbd {
 	unsigned int ids[MAX_BONES_PER_VERTEX];
 	float weights[MAX_BONES_PER_VERTEX];
 	MODEL_LOADER_API void add_bone_data(unsigned int id, float weight);
+	inline vbd() {
+		memset(&this->ids, 0, sizeof(unsigned int) * MAX_BONES_PER_VERTEX);
+		memset(&this->weights, 0, sizeof(float) * MAX_BONES_PER_VERTEX);
+	}
 };
 struct texture {
 	unsigned int id;
 	std::string type, path;
 };
-struct mat4 : public glm::mat4 {
-	mat4 operator=(aiMatrix4x4& m) {
-		memcpy(&(*this)[0], &m.a1, sizeof(float) * 4);
-		memcpy(&(*this)[1], &m.b1, sizeof(float) * 4);
-		memcpy(&(*this)[2], &m.c1, sizeof(float) * 4);
-		memcpy(&(*this)[3], &m.d1, sizeof(float) * 4);
-		return *this;
-	}
-};
+class model;
 class mesh {
 public:
 	std::vector<vertex> vertices;
 	std::vector<unsigned int> indices;
 	std::vector<texture> textures;
-	MODEL_LOADER_API mesh(std::vector<vertex> vertices, std::vector<unsigned int> indices, std::vector<texture> textures, aiMesh* m);
+	std::vector<vbd> bone_data;
+	MODEL_LOADER_API mesh(std::vector<vertex> vertices, std::vector<unsigned int> indices, std::vector<texture> textures, std::vector<vbd> bones, aiMesh* m, model* parent);
 	MODEL_LOADER_API void draw(unsigned int shader);
 private:
-	struct bone_info {
-		mat4 bone_offset;
-		mat4 final_transform;
-		bone_info() {
-			glm::mat4 zero(0.f);
-			memcpy(&this->bone_offset,     &zero, sizeof(mat4));
-			memcpy(&this->final_transform, &zero, sizeof(mat4));
-		}
-	};
-	std::map<std::string, unsigned int> bone_mapping;
-	std::vector<bone_info> _bone_info;
+	model* parent;
 	aiMesh* m;
-	unsigned int bone_count;
-	unsigned int vao, vbo, ebo;
+	unsigned int vao, vbo, ebo, bones;
 	void setup_mesh();
-	void load_bones();
 };
+#ifdef MODEL_LOADER_BUILD
+template<typename _Ty> inline glm::mat<4, 4, _Ty, glm::packed_highp> from_assimp(aiMatrix4x4t<_Ty> m) {
+	glm::mat4 result;
+	result[0][0] = m.a1; result[0][1] = m.a2; result[0][2] = m.a3; result[0][3] = m.a4;
+	result[1][0] = m.b1; result[1][1] = m.b2; result[1][2] = m.b3; result[1][3] = m.b4;
+	result[2][0] = m.c1; result[2][1] = m.c2; result[2][2] = m.c3; result[2][3] = m.c4;
+	result[3][0] = m.d1; result[3][1] = m.d2; result[3][2] = m.d3; result[3][3] = m.d4;
+	return result;
+}
+template<typename _Ty> inline glm::vec<3, _Ty, glm::packed_highp> from_assimp(aiVector3t<_Ty> v) {
+	return glm::vec<3, _Ty, glm::packed_highp>(v.x, v.y, v.z);
+}
+template<typename _Ty> inline glm::vec<2, _Ty, glm::packed_highp> from_assimp(aiVector2t<_Ty> v) {
+	return glm::vec<2, _Ty, glm::packed_highp>(v.x, v.y);
+}
+template<typename _Ty> inline glm::mat<4, 4, _Ty, glm::packed_highp> create_scale_matrix(aiVector3t<_Ty> v) {
+	glm::mat4 result;
+	result[0][0] = v.x;    result[0][1] = 0.0f;   result[0][2] = 0.0f;   result[0][3] = 0.0f;
+	result[1][0] = 0.0f;   result[1][1] = v.y;    result[1][2] = 0.0f;   result[1][3] = 0.0f;
+	result[2][0] = 0.0f;   result[2][1] = 0.0f;   result[2][2] = v.z;    result[2][3] = 0.0f;
+	result[3][0] = 0.0f;   result[3][1] = 0.0f;   result[3][2] = 0.0f;   result[3][3] = 1.0f;
+	return result;
+}
+template<typename _Ty> inline glm::mat<4, 4, _Ty, glm::packed_highp> create_position_matrix(aiVector3t<_Ty> v) {
+	glm::mat4 result;
+	result[0][0] = 1.0f; result[0][1] = 0.0f; result[0][2] = 0.0f; result[0][3] = v.x;
+	result[1][0] = 0.0f; result[1][1] = 1.0f; result[1][2] = 0.0f; result[1][3] = v.y;
+	result[2][0] = 0.0f; result[2][1] = 0.0f; result[2][2] = 1.0f; result[2][3] = v.z;
+	result[3][0] = 0.0f; result[3][1] = 0.0f; result[3][2] = 0.0f; result[3][3] = 1.0f;
+	return result;
+}
+#endif

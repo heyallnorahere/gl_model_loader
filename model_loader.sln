@@ -5,6 +5,11 @@ VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "model_loader", "model_loader.vcxproj", "{0591C48D-02BE-4B92-9021-0CB33C2E70E3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gl_model_loader_test", "..\gl_model_loader_test\gl_model_loader_test.vcxproj", "{D13065F5-628C-4931-8B4A-D8785B546604}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0591C48D-02BE-4B92-9021-0CB33C2E70E3} = {0591C48D-02BE-4B92-9021-0CB33C2E70E3}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -15,6 +20,10 @@ Global
 		{0591C48D-02BE-4B92-9021-0CB33C2E70E3}.Debug|x64.Build.0 = Debug|x64
 		{0591C48D-02BE-4B92-9021-0CB33C2E70E3}.Release|x64.ActiveCfg = Release|x64
 		{0591C48D-02BE-4B92-9021-0CB33C2E70E3}.Release|x64.Build.0 = Release|x64
+		{D13065F5-628C-4931-8B4A-D8785B546604}.Debug|x64.ActiveCfg = Debug|x64
+		{D13065F5-628C-4931-8B4A-D8785B546604}.Debug|x64.Build.0 = Debug|x64
+		{D13065F5-628C-4931-8B4A-D8785B546604}.Release|x64.ActiveCfg = Release|x64
+		{D13065F5-628C-4931-8B4A-D8785B546604}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

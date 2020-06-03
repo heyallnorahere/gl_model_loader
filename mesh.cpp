@@ -1,43 +1,16 @@
 #include "mesh.h"
+#include "model.h"
 #include <GL/glew.h>
-static glm::mat4 from_aiMatrix4x4(aiMatrix4x4& m) {
-	glm::mat4 result;
-	size_t size = sizeof(float) * 4;
-	memcpy(&result[0], &m.a1, size);
-	memcpy(&result[1], &m.b1, size);
-	memcpy(&result[2], &m.c1, size);
-	memcpy(&result[3], &m.d1, size);
-	return result;
-}
+#include <iostream>
 using namespace std;
-mesh::mesh(vector<vertex> vertices, vector<unsigned int> indices, vector<texture> textures, aiMesh* m) : m(m) {
-	this->bone_count = 0;
+mesh::mesh(vector<vertex> vertices, vector<unsigned int> indices, vector<texture> textures, vector<vbd> bones, aiMesh* m, model* parent) : m(m), parent(parent) {
 	this->vertices = vertices;
 	this->indices = indices;
 	this->textures = textures;
-	if (this->m->HasBones()) this->load_bones();
+	this->bone_data = bones;
 	setup_mesh();
 }
-void mesh::load_bones() {
-	for (int i = 0; i < this->m->mNumBones; i++) {
-		unsigned int bone_index = 0;
-		std::string bone_name = this->m->mBones[i]->mName.data;
-		if (this->bone_mapping.find(bone_name) == this->bone_mapping.end()) {
-			bone_index = this->bone_count;
-			this->bone_count++;
-			bone_info bi;
-			this->_bone_info.push_back(bi);
-		} else bone_index = this->bone_mapping[bone_name];
-		this->bone_mapping.insert(std::pair<std::string, unsigned int>(bone_name, bone_index));
-		this->_bone_info[bone_index].bone_offset = this->m->mBones[i]->mOffsetMatrix;
-		for (int j = 0; j < this->m->mBones[i]->mNumWeights; j++) {
-			auto vertex_id = this->m->mBones[i]->mWeights[j].mVertexId;
-			float weight = this->m->mBones[i]->mWeights[j].mWeight;
-			this->vertices[vertex_id].add_bone_data(bone_index, weight);
-		}
-	}
-}
-void vertex::add_bone_data(unsigned int id, float weight) {
+void vbd::add_bone_data(unsigned int id, float weight) {
 	for (int i = 0; i < MAX_BONES_PER_VERTEX; i++) {
 		if (this->weights[i] < 0.001f) {
 			this->ids[i] = id;
@@ -67,16 +40,17 @@ void mesh::setup_mesh() {
 	// vertex texture coords
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, uv));
-	if (this->m->HasBones()) {
-		// bones (if any)
-		glEnableVertexAttribArray(3);
-		glVertexAttribIPointer(3, 4, GL_INT,            sizeof(vertex), (void*)offsetof(vertex, ids));
-		glEnableVertexAttribArray(4);
-		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, weights));
-	}
+	glGenBuffers(1, &this->bones);
+	glBindBuffer(GL_ARRAY_BUFFER, this->bones);
+	glBufferData(GL_ARRAY_BUFFER, this->bone_data.size() * sizeof(vbd), this->bone_data.data(), GL_STATIC_DRAW);
+	glEnableVertexAttribArray(3);
+	glVertexAttribIPointer(3, 4, GL_INT,            sizeof(vbd), (void*)0);
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(vbd), (void*)offsetof(vbd, weights));
 	glBindVertexArray(0);
 }
 void mesh::draw(unsigned int shader) {
+	glUniform1i(glGetUniformLocation(shader, "has_bones"), this->m->HasBones());
 	unsigned int diffuseNr = 1, specularNr = 1;
 	for (int i = 0; i < this->textures.size(); i++) {
 		glActiveTexture(GL_TEXTURE0 + i);

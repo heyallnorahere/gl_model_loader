@@ -6,6 +6,7 @@
     <description>
       please report any issues to the github repo
       disclaimer: this library uses glew to load opengl functions
+      if you are using a loader like glad make sure to initialize glew or switch to it
     </description>
     <tags>Native native OpenGL opengl Opengl dynamic Dynamic</tags>
     <projectUrl>https://github.com/yodasoda1219/gl_model_loader</projectUrl>
