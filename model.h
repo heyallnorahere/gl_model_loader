@@ -17,17 +17,19 @@ public:
 			memset(&bone_offset[0], 0, sizeof(glm::mat4));
 			memset(&final_transform[0], 0, sizeof(glm::mat4));
 		}
-	}; 
+	};
 	model(std::string path) {
 		this->load_model(path);
 	}
 	MODEL_LOADER_API void draw(unsigned int shader, float time, int anim_id = -1);
 	MODEL_LOADER_API const aiScene* get_scene();
+	MODEL_LOADER_API std::vector<glm::vec3> get_lights();
 	unsigned int bone_count = 0;
 	std::vector<bone_info> _bone_info;
 	std::map<std::string, unsigned int> bone_mapping;
 private:
 	glm::mat4 global_inverse_transform;
+	std::vector<glm::vec3> lights;
 	std::vector<mesh> meshes;
 	std::vector<texture> textures_loaded;
 	std::string directory;

@@ -1,5 +1,6 @@
 #include "model.h"
 #include <iostream>
+#include <sstream>
 #define STB_IMAGE_IMPLEMENTATION
 #include "third-party/stb_image.h"
 using namespace std;
@@ -9,7 +10,7 @@ void model::draw(unsigned int shader, float time, int anim_id) {
 	if (anim_id != -1) {
 		float ticks_per_second = (float)(this->scene->mAnimations[anim_id]->mTicksPerSecond != 0 ? this->scene->mAnimations[anim_id]->mTicksPerSecond : 25.0f);
 		float time_in_ticks = time * ticks_per_second;
-		anim_time = fmod(time_in_ticks, (float)this->scene->mAnimations[0]->mDuration);
+		anim_time = fmod(time_in_ticks, (float)this->scene->mAnimations[anim_id]->mDuration);
 	} else {
 		anim_time = 0.f;
 	}
@@ -36,6 +37,13 @@ void model::load_model(string path) {
 	this->process_node(this->scene->mRootNode);
 }
 void model::process_node(aiNode* node) {
+	std::stringstream ss;
+	for (int i = 0; i < node->mName.length; i++) {
+		ss << (char)tolower(node->mName.data[i]);
+	}
+	if (!ss.str().find("light", 0)) {
+		this->lights.push_back(get_position_from_matrix(node->mTransformation));
+	}
 	for (int i = 0; i < node->mNumMeshes; i++)
 		this->meshes.push_back(this->process_mesh(this->scene->mMeshes[node->mMeshes[i]]));
 	for (int i = 0; i < node->mNumChildren; i++)
@@ -286,4 +294,7 @@ unsigned int tex_from_file(const char* path, const string& directory, bool gamma
 }
 const aiScene* model::get_scene() {
 	return this->scene;
+}
+std::vector<glm::vec3> model::get_lights() {
+	return this->lights;
 }

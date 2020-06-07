@@ -56,7 +56,7 @@ template<typename _Ty> inline glm::vec<2, _Ty, glm::packed_highp> from_assimp(ai
 	return glm::vec<2, _Ty, glm::packed_highp>(v.x, v.y);
 }
 template<typename _Ty> inline glm::mat<4, 4, _Ty, glm::packed_highp> create_scale_matrix(aiVector3t<_Ty> v) {
-	glm::mat4 result;
+	glm::mat<4, 4, _Ty, glm::packed_highp> result;
 	result[0][0] = v.x;    result[0][1] = 0.0f;   result[0][2] = 0.0f;   result[0][3] = 0.0f;
 	result[1][0] = 0.0f;   result[1][1] = v.y;    result[1][2] = 0.0f;   result[1][3] = 0.0f;
 	result[2][0] = 0.0f;   result[2][1] = 0.0f;   result[2][2] = v.z;    result[2][3] = 0.0f;
@@ -64,11 +64,14 @@ template<typename _Ty> inline glm::mat<4, 4, _Ty, glm::packed_highp> create_scal
 	return result;
 }
 template<typename _Ty> inline glm::mat<4, 4, _Ty, glm::packed_highp> create_position_matrix(aiVector3t<_Ty> v) {
-	glm::mat4 result;
+	glm::mat<4, 4, _Ty, glm::packed_highp> result;
 	result[0][0] = 1.0f; result[0][1] = 0.0f; result[0][2] = 0.0f; result[0][3] = v.x;
 	result[1][0] = 0.0f; result[1][1] = 1.0f; result[1][2] = 0.0f; result[1][3] = v.y;
 	result[2][0] = 0.0f; result[2][1] = 0.0f; result[2][2] = 1.0f; result[2][3] = v.z;
 	result[3][0] = 0.0f; result[3][1] = 0.0f; result[3][2] = 0.0f; result[3][3] = 1.0f;
 	return result;
+}
+template<typename _Ty> inline glm::vec<3, _Ty, glm::packed_highp> get_position_from_matrix(aiMatrix4x4t<_Ty> m) {
+	return glm::vec<3, _Ty, glm::packed_highp>(m.a4, m.b4, m.c4);
 }
 #endif
