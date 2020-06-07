@@ -10,6 +10,7 @@
     </description>
     <tags>Native native OpenGL opengl Opengl dynamic Dynamic</tags>
     <projectUrl>https://github.com/yodasoda1219/gl_model_loader</projectUrl>
+    <license type="file">metadata/LICENSE</license>
     <authors>Theo Beda</authors>
     <dependencies>
         <dependency id="assimp.v140" version="3.2.0"/>
@@ -24,5 +25,6 @@
     <file src="x64\Debug\model_loader.dll" target="build/native/bin/x64/Debug"/>
     <file src="*.h" target="build/native/include"/>
     <file src="gl_model_loader.props" target="build/native"/>
+    <file src="LICENSE" target="metadata/LICENSE"/>
   </files>
 </package>
