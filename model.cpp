@@ -26,7 +26,7 @@ void model::draw(unsigned int shader, float time, int anim_id) {
 		this->meshes[i].draw(shader);
 }
 void model::load_model(string path) {
-	this->scene = this->importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+	this->scene = this->importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_LimitBoneWeights);
 	if (!this->scene || this->scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !this->scene->mRootNode) {
 		cout << "model loading error: " << importer.GetErrorString() << endl;
 		return;
