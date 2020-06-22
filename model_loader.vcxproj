@@ -79,12 +79,16 @@
   <ItemGroup>
     <ClInclude Include="api.h" />
     <ClInclude Include="mesh.h" />
+    <ClInclude Include="metadata.h" />
     <ClInclude Include="model.h" />
+    <ClInclude Include="model_loader.h" />
     <ClInclude Include="third-party\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="metadata.cpp" />
     <ClCompile Include="model.cpp" />
+    <ClCompile Include="model_loader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="gl_model_loader.nuspec" />
