@@ -51,11 +51,11 @@ namespace gl_model_loader {
 			this->lights.push_back(get_position_from_matrix(node->mTransformation));
 		}
 		for (int i = 0; i < node->mNumMeshes; i++)
-			this->meshes.push_back(this->process_mesh(this->scene->mMeshes[node->mMeshes[i]]));
+			this->meshes.push_back(this->process_mesh(this->scene->mMeshes[node->mMeshes[i]], node));
 		for (int i = 0; i < node->mNumChildren; i++)
 			this->process_node(node->mChildren[i]);
 	}
-	mesh model::process_mesh(aiMesh* mesh) {
+	mesh model::process_mesh(aiMesh* mesh, aiNode* parent_node) {
 		vector<vertex> vertices;
 		vertices.reserve(mesh->mNumVertices);
 		vector<unsigned int> indices;
@@ -113,7 +113,7 @@ namespace gl_model_loader {
 			}
 		}
 		for (auto& p : mesh_procs)
-			p.proc_ptr(mesh, this, vertices, indices, textures, bone_ids_and_weights, p.value);
+			p.proc_ptr(mesh, parent_node, this, vertices, indices, textures, bone_ids_and_weights, p.value);
 		return ::gl_model_loader::mesh(vertices, indices, textures, bone_ids_and_weights, mesh, this);
 	}
 	unsigned int tex_from_file(const char* path, const string& directory, bool gamma = false);

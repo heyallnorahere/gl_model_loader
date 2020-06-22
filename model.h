@@ -37,7 +37,7 @@ namespace gl_model_loader {
 		const aiScene* scene;
 		MODEL_LOADER_API void load_model(std::string path);
 		void process_node(aiNode* node);
-		mesh process_mesh(aiMesh* _mesh);
+		mesh process_mesh(aiMesh* _mesh, aiNode* parent_node);
 		std::vector<texture> load_material_textures(aiMaterial* mat, aiTextureType type, std::string type_name);
 		void read_node_heirarchy(float anim_time, const aiNode* node, const glm::mat4& parent_transform, int anim_id);
 		const aiNodeAnim* find_node_animation(const aiAnimation* animation, const std::string& node_name);

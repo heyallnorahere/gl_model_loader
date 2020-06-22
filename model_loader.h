@@ -3,7 +3,7 @@
 #include "metadata.h"
 namespace gl_model_loader {
 	typedef void(__stdcall*process_node_proc)(aiNode*,model*, void*);
-	typedef void(__stdcall*process_mesh_proc)(aiMesh*,model*,
+	typedef void(__stdcall*process_mesh_proc)(aiMesh*,aiNode*,model*,
 		const std::vector<vertex>&,
 		const std::vector<unsigned int>&,
 		const std::vector<texture>&,
