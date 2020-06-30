@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>gl_model_loader</id>
-    <version>1.7.1</version>
+    <version>1.7.2</version>
     <description>
       please report any issues to the github repo
       disclaimer: this library uses glew to load opengl functions
