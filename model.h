@@ -1,6 +1,7 @@
 #pragma once
 #include "mesh.h"
 #include <string>
+#include <map>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -9,6 +10,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 namespace gl_model_loader {
+	MODEL_LOADER_API void set_visible(aiMesh* m, bool is_visible);
 	class model {
 	public:
 		struct bone_info {

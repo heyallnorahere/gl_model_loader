@@ -52,7 +52,11 @@ namespace gl_model_loader {
 		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(vbd), (void*)offsetof(vbd, weights));
 		glBindVertexArray(0);
 	}
+	extern std::map<aiMesh*, bool> visible_map;
 	void mesh::draw(unsigned int shader) {
+		bool is_visible = true;
+		if (visible_map.find(this->m) != visible_map.end()) is_visible = visible_map[this->m];
+		if (!is_visible) return;
 		glUniform1i(glGetUniformLocation(shader, "has_bones"), this->m->HasBones());
 		unsigned int diffuseNr = 1, specularNr = 1;
 		for (int i = 0; i < this->textures.size(); i++) {

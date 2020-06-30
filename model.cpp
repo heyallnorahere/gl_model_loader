@@ -306,4 +306,9 @@ namespace gl_model_loader {
 	std::vector<glm::vec3> model::get_lights() {
 		return this->lights;
 	}
+	std::map<aiMesh*, bool> visible_map;
+	void set_visible(aiMesh* m, bool is_visible) {
+		if (visible_map.find(m) != visible_map.end()) visible_map[m] = is_visible;
+		else visible_map.insert(std::pair<aiMesh*, bool>(m, is_visible));
+	}
 }
