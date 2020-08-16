@@ -41,6 +41,7 @@ namespace gl_model_loader {
 	}
 	extern std::vector<proc_call<process_node_proc>> node_procs;
 	extern std::vector<proc_call<process_mesh_proc>> mesh_procs;
+	extern proc_call<process_texture_path_proc> ptp_proc;
 	void model::process_node(aiNode* node) {
 		for (auto& p : node_procs) p.proc_ptr(node, this, p.value);
 		std::stringstream ss;
@@ -268,6 +269,7 @@ namespace gl_model_loader {
 		// for blender 2.8 obj
 		size_t strpos = 0;
 		while ((strpos = fullpath.find("\\\\", strpos + 2)) != string::npos) { fullpath.replace(strpos, 2, "\\"); }
+		if (ptp_proc.proc_ptr) fullpath = ptp_proc.proc_ptr(fullpath, ptp_proc.value);
 		unsigned int textureID;
 		glGenTextures(1, &textureID);
 		int width, height, nrComponents;
